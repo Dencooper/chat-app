@@ -6,7 +6,7 @@ const userLogin = () => {
     const [loading, setLoading] = useState(false);
     const { setAuthUser } = useAuthContext();
 
-    const login = async (username, password) => {
+    const login = async ({ username, password }) => {
         setLoading(true)
         try {
             const res = await fetch("/api/auth/login", {
@@ -19,14 +19,15 @@ const userLogin = () => {
                 throw new Error(data.error);
             }
 
-            localStorage.setItem("chat-user", JSON)
-
+            localStorage.setItem("chat-user", JSON.stringify(data));
+            setAuthUser(data);
         } catch (error) {
             toast.error(error.message);
         } finally {
             setLoading(false)
         }
     }
+    return { loading, login };
 }
 
 export default userLogin
